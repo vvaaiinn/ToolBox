@@ -1,73 +1,46 @@
 package com.adto.toolbox;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.renderscript.Element.DataType;
-
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemLongClickListener;
+
+import com.adto.entity.Constants;
+import com.adto.util.GetPostUtil;
+import com.adto.util.NetUtil;
+import com.adto.util.PrivateUtil;
+import com.adto.util.SysApplication;
+import com.adto.util.VersionUtil;
 
 //import com.adto.adapter.ListItemAdapter;
-import com.adto.entity.Constants;
-import com.adto.entity.UpdateInfo;
-import com.adto.util.PrivateUtil;
-import com.adto.util.VersionUtil;
-import com.adto.util.GetPostUtil;
-import com.adto.util.IsConnectity;
-import com.adto.util.NetUtil;
-import com.adto.util.SysApplication;
 
 public class MainActivity extends Activity {
 
@@ -217,9 +190,9 @@ public class MainActivity extends Activity {
 			SharedPreferences settings = getSharedPreferences("setting", 0);
 			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
 
-			for (String id : ids) {
-				System.out.println("hahaha" + id);
-			}
+			// for (String id : ids) {
+			// System.out.println("hahaha" + id);
+			// }
 			JSONObject result = new JSONObject(res);
 			String status = result.getString("status");
 			if (status.equals("0")) {
@@ -236,24 +209,30 @@ public class MainActivity extends Activity {
 					JSONObject obj3 = lastweek.getJSONObject(id);
 					HashMap<String, String> map = new HashMap<String, String>();
 					map.put("item", obj.getString("name"));
+
 					String d1 = obj.getString("consume");
 					String d2 = obj.getString("filter_pv");
 					String d3 = obj.getString("pv");
 					map.put("consume", CalcEcpm(d1, d2, d3));
 					String t1 = obj2.getString("consume");
 					String t2 = obj2.getString("filter_pv");
-					String t3 = obj.getString("pv");
+					String t3 = obj2.getString("pv");
 					map.put("rate",
 							rateFormat(CalcEcpm(d1, d2, d3),
 									CalcEcpm(t1, t2, t3)));
 					t1 = obj3.getString("consume");
 					t2 = obj3.getString("filter_pv");
-					t3 = obj.getString("pv");
+					t3 = obj3.getString("pv");
 
 					if (!day) {
 						map.put("rate",
 								rateFormat(CalcEcpm(d1, d2, d3),
 										CalcEcpm(t1, t2, t3)));
+					}
+					if (obj.getString("name").equals("总计")
+							|| obj.getString("name").equals("其它搜索")) {
+						map.put("consume", "N/A");
+						map.put("rate", "N/A");
 					}
 
 					map.put("path",
@@ -364,7 +343,7 @@ public class MainActivity extends Activity {
 			dateText.setText(dateFormat(year1, month1, day1) + " 请求数据失败 ");
 		} else {
 			dateText.setText(dateFormat(year1, month1, day1) + " VS " + date1
-					+ "   " + hour + "");
+					+ "  " + hour + "时数据对比");
 		}
 	}
 
@@ -462,9 +441,9 @@ public class MainActivity extends Activity {
 					bindListener();
 					setDateText();
 					loading.setVisibility(View.GONE);
-					Toast.makeText(MainActivity.this, "刷新成功  "
-					// + dateText.getText()
-							, Toast.LENGTH_LONG).show();
+					Toast.makeText(MainActivity.this,
+							"\t\t\t\t\t\t\t\t\t\t刷新成功\n" + dateText.getText(),
+							Toast.LENGTH_LONG).show();
 				}
 				break;
 			}

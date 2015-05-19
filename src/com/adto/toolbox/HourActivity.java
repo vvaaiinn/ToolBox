@@ -1,9 +1,5 @@
 package com.adto.toolbox;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,26 +8,14 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,13 +29,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adto.entity.Constants;
-import com.adto.entity.UpdateInfo;
 import com.adto.util.GetPostUtil;
 import com.adto.util.NetUtil;
 import com.adto.util.PrivateUtil;
 import com.adto.util.SysApplication;
 import com.adto.util.VersionUtil;
-
 
 public class HourActivity extends Activity {
 
@@ -65,7 +47,7 @@ public class HourActivity extends Activity {
 	String date1, date2;
 	ArrayList<HashMap<String, String>> data;
 	LinearLayout loading;
-	TextView compareText,consumeText;
+	TextView compareText, consumeText;
 	ListView listview;
 	ListItemAdapter la;
 	public static final int QUEST = 1;
@@ -74,15 +56,15 @@ public class HourActivity extends Activity {
 	public static final int RATE = 4;
 	public static final int PARSE = 5;
 	public static final int RATE1 = 6;
-    boolean dataType = true;
+	boolean dataType = true;
 	String res = "";
 	String catalog = "";
 	String url = "";
 	String[] ids;
-	String phone,validkey;
+	String phone, validkey;
 	boolean isconnected = true;
-	boolean day=true;
-	
+	boolean day = true;
+
 	MainHandler myhandler;
 
 	private ApplicationData result;
@@ -99,8 +81,8 @@ public class HourActivity extends Activity {
 		data = new ArrayList<HashMap<String, String>>();
 		loading = (LinearLayout) findViewById(R.id.loading);
 		dateText = (TextView) findViewById(R.id.dateText);
-		compareText=(TextView)findViewById(R.id.compare2);
-		consumeText=(TextView)findViewById(R.id.compare1);
+		compareText = (TextView) findViewById(R.id.compare2);
+		consumeText = (TextView) findViewById(R.id.compare1);
 		consumeText.setText("小时consume(元)");
 		myhandler = new MainHandler();
 		netUtil = new NetUtil(getApplicationContext());
@@ -115,7 +97,7 @@ public class HourActivity extends Activity {
 		}
 		bindListener();
 		compareText.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
@@ -124,142 +106,149 @@ public class HourActivity extends Activity {
 			}
 		});
 		consumeText.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
 				dataType = !dataType;
 				myhandler.sendEmptyMessage(RATE1);
-				
+
 			}
 		});
-		
+
 	}
 
 	public boolean initData() {
-		boolean success=true;
+		boolean success = true;
 		try {
 			data.clear();
 			SharedPreferences settings = getSharedPreferences("setting", 0);
 			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
 
 			JSONObject result = new JSONObject(res);
-			String status=result.getString("status");
-			if(status.equals("0")){
-			
-			JSONObject hourArray = result.getJSONObject("hour");
-			JSONObject today = hourArray.getJSONObject("0");
-			JSONObject yesterday = hourArray.getJSONObject("1");
-			JSONObject lastweek = hourArray.getJSONObject("7");
-			date1 = hourArray.getString("date1");
-			date2 = hourArray.getString("date7");
-			for (int i = 0; i < ids.length; i++) {
-				String id = ids[i];
-				JSONObject obj = today.getJSONObject(id);
-				JSONObject obj2 = yesterday.getJSONObject(id);
-				JSONObject obj3 = lastweek.getJSONObject(id);
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("item", obj.getString("name"));
-				map.put("consume", obj.getString("consume"));
-				map.put("rate",
-						rateFormat(obj.getString("consume"),
-								obj2.getString("consume")));
-				if(!day){
-				map.put("rate",
-						rateFormat(obj.getString("consume"),
-								obj3.getString("consume")));
-				}
-				map.put("path",
-						PrivateUtil.getPath(Integer.valueOf(id), catalog));
-				data.add(map);
-			}
-			}else{
-				Toast.makeText(getApplicationContext(), result.getString("description"),
-						Toast.LENGTH_LONG).show();
-				Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
-				startActivity(intent);
-				finish();
-				success=false;
-			}
-		} catch (Exception e) {
-			success=false;
-			dateText.setText("err:" + e.getMessage());
-			e.printStackTrace();
-		}
-		return success;
-	}
-	
-	public boolean initData2() {
-		boolean success=true;
-		try {
-			data.clear();
-			SharedPreferences settings = getSharedPreferences("setting", 0);
-			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
-			
-			JSONObject result = new JSONObject(res);
-			String status=result.getString("status");
-			if(status.equals("0")){			
-			JSONObject hourArray = result.getJSONObject("hour");
-			JSONObject today = hourArray.getJSONObject("0");
-			JSONObject yesterday = hourArray.getJSONObject("1");
-			JSONObject lastweek = hourArray.getJSONObject("7");
-			date1 = hourArray.getString("date1");
-			date2 = hourArray.getString("date7");
-			for (int i = 0; i < ids.length; i++) {
-				String id = ids[i];
-				JSONObject obj = today.getJSONObject(id);
-				JSONObject obj2 = yesterday.getJSONObject(id);
-				JSONObject obj3 = lastweek.getJSONObject(id);
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("item", obj.getString("name"));		
-				String d1 = obj.getString("consume");
-				String d2 = obj.getString("filter_pv");	
-				String d3 = obj.getString("pv");
-				map.put("consume", CalcEcpm(d1, d2,d3));
-				String t1 = obj2.getString("consume");
-				String t2 = obj2.getString("filter_pv");	
-				String t3= obj.getString("pv");
-				map.put("rate",
-						rateFormat(CalcEcpm(d1, d2,d3),
-								CalcEcpm(t1, t2,t3)));
-				 t1 = obj3.getString("consume");
-				 t2 = obj3.getString("filter_pv");
-				 t3= obj.getString("pv");
-				 if (!day) {
+			String status = result.getString("status");
+			if (status.equals("0")) {
+
+				JSONObject hourArray = result.getJSONObject("hour");
+				JSONObject today = hourArray.getJSONObject("0");
+				JSONObject yesterday = hourArray.getJSONObject("1");
+				JSONObject lastweek = hourArray.getJSONObject("7");
+				date1 = hourArray.getString("date1");
+				date2 = hourArray.getString("date7");
+				for (int i = 0; i < ids.length; i++) {
+					String id = ids[i];
+					JSONObject obj = today.getJSONObject(id);
+					JSONObject obj2 = yesterday.getJSONObject(id);
+					JSONObject obj3 = lastweek.getJSONObject(id);
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put("item", obj.getString("name"));
+					map.put("consume", obj.getString("consume"));
+					map.put("rate",
+							rateFormat(obj.getString("consume"),
+									obj2.getString("consume")));
+					if (!day) {
 						map.put("rate",
-								rateFormat(CalcEcpm(d1, d2,d3),
-										CalcEcpm(t1, t2,t3)));
+								rateFormat(obj.getString("consume"),
+										obj3.getString("consume")));
 					}
-					
-				map.put("path",
-						PrivateUtil.getPath(Integer.valueOf(id), catalog));
-				data.add(map);
-			}
-			}else{
-				Toast.makeText(getApplicationContext(), result.getString("description"),
-						Toast.LENGTH_LONG).show();
-				Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
+					map.put("path",
+							PrivateUtil.getPath(Integer.valueOf(id), catalog));
+					data.add(map);
+				}
+			} else {
+				Toast.makeText(getApplicationContext(),
+						result.getString("description"), Toast.LENGTH_LONG)
+						.show();
+				Intent intent = new Intent(getApplicationContext(),
+						LoginActivity.class);
 				startActivity(intent);
 				finish();
-				success=false;
+				success = false;
 			}
 		} catch (Exception e) {
-			success=false;
+			success = false;
 			dateText.setText("err:" + e.getMessage());
 			e.printStackTrace();
 		}
 		return success;
 	}
-	
-	
-	public void setAdapter(){
-		 listview = (ListView) findViewById(R.id.listview);
 
-		 la = new ListItemAdapter(getApplicationContext(), data);
+	public boolean initData2() {
+		boolean success = true;
+		try {
+			data.clear();
+			SharedPreferences settings = getSharedPreferences("setting", 0);
+			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
+
+			JSONObject result = new JSONObject(res);
+			String status = result.getString("status");
+			if (status.equals("0")) {
+				JSONObject hourArray = result.getJSONObject("hour");
+				JSONObject today = hourArray.getJSONObject("0");
+				JSONObject yesterday = hourArray.getJSONObject("1");
+				JSONObject lastweek = hourArray.getJSONObject("7");
+				date1 = hourArray.getString("date1");
+				date2 = hourArray.getString("date7");
+				for (int i = 0; i < ids.length; i++) {
+					String id = ids[i];
+					JSONObject obj = today.getJSONObject(id);
+					JSONObject obj2 = yesterday.getJSONObject(id);
+					JSONObject obj3 = lastweek.getJSONObject(id);
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put("item", obj.getString("name"));
+					String d1 = obj.getString("consume");
+					String d2 = obj.getString("filter_pv");
+					String d3 = obj.getString("pv");
+					map.put("consume", CalcEcpm(d1, d2, d3));
+					String t1 = obj2.getString("consume");
+					String t2 = obj2.getString("filter_pv");
+					String t3 = obj2.getString("pv");
+					map.put("rate",
+							rateFormat(CalcEcpm(d1, d2, d3),
+									CalcEcpm(t1, t2, t3)));
+					t1 = obj3.getString("consume");
+					t2 = obj3.getString("filter_pv");
+					t3 = obj3.getString("pv");
+					if (!day) {
+						map.put("rate",
+								rateFormat(CalcEcpm(d1, d2, d3),
+										CalcEcpm(t1, t2, t3)));
+					}
+					if (obj.getString("name").equals("总计")
+							|| obj.getString("name").equals("其它搜索")) {
+						map.put("consume", "N/A");
+						map.put("rate", "N/A");
+					}
+					map.put("path",
+							PrivateUtil.getPath(Integer.valueOf(id), catalog));
+					data.add(map);
+				}
+			} else {
+				Toast.makeText(getApplicationContext(),
+						result.getString("description"), Toast.LENGTH_LONG)
+						.show();
+				Intent intent = new Intent(getApplicationContext(),
+						LoginActivity.class);
+				startActivity(intent);
+				finish();
+				success = false;
+			}
+		} catch (Exception e) {
+			success = false;
+			dateText.setText("err:" + e.getMessage());
+			e.printStackTrace();
+		}
+		return success;
+	}
+
+	public void setAdapter() {
+		listview = (ListView) findViewById(R.id.listview);
+
+		la = new ListItemAdapter(getApplicationContext(), data);
 
 		if (data != null && data.size() > 0) {
 			listview.setAdapter(la);
-		} 
+		}
 	}
 
 	public void bindListener() {
@@ -285,7 +274,7 @@ public class HourActivity extends Activity {
 				} else {
 					loading.setVisibility(View.VISIBLE);
 					myhandler.sendEmptyMessage(QUEST);
-					
+
 				}
 			}
 		});
@@ -311,8 +300,6 @@ public class HourActivity extends Activity {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.HOUR_OF_DAY, -2);
 
-		
-
 		Intent i = getIntent();
 		String load = i.getStringExtra("load_date");
 		if (result.isInit()) {
@@ -336,10 +323,9 @@ public class HourActivity extends Activity {
 			dateText.setText(dateFormat(year1, month1, day1) + " 请求数据失败 ");
 		} else {
 			dateText.setText(dateFormat(year1, month1, day1) + " VS " + date1
-					+ "   " + hour + "");
+					+ "  " + hour + "时数据对比");
 		}
 	}
-
 
 	public class MainHandler extends Handler {
 		public void handleMessage(Message msg) {
@@ -350,17 +336,24 @@ public class HourActivity extends Activity {
 					public void run() {
 						try {
 							res = "";
-							
-							SharedPreferences settings = getSharedPreferences("setting", 0);
-							StringBuilder params=new StringBuilder();
-							params.append("phone="+settings.getString("phone", ""));
-							params.append("&validkey="+settings.getString("validkey", ""));
-							params.append("&ver="+VersionUtil.getVerName(getApplicationContext()));
 
-							res = GetPostUtil.sendGet(Constants.URL+ "getContent.php", getDatePram()+params.toString());
+							SharedPreferences settings = getSharedPreferences(
+									"setting", 0);
+							StringBuilder params = new StringBuilder();
+							params.append("phone="
+									+ settings.getString("phone", ""));
+							params.append("&validkey="
+									+ settings.getString("validkey", ""));
+							params.append("&ver="
+									+ VersionUtil
+											.getVerName(getApplicationContext()));
+
+							res = GetPostUtil.sendGet(Constants.URL
+									+ "getContent.php",
+									getDatePram() + params.toString());
 							catalog = GetPostUtil.sendGet(Constants.URL
 									+ "getBizlist.php", params.toString());
-							
+
 							myhandler.sendEmptyMessage(PARSE);
 							result.setRes(res);
 							result.setCatalog(catalog);
@@ -376,68 +369,66 @@ public class HourActivity extends Activity {
 				loading.setVisibility(View.GONE);
 				break;
 			case REFRESH:
-				
-//				
-//				result.setRes(res);
-//				initData();
+
+				//
+				// result.setRes(res);
+				// initData();
 
 				break;
-			case RATE:				
-				if(dataType)
+			case RATE:
+				if (dataType)
 					initData();
-				else 
+				else
 					initData2();
 				la.notifyDataSetChanged();
 				loading.setVisibility(View.GONE);
 				if (day) {
 					compareText.setText(getString(R.string.day_on_day));
-				Toast.makeText(getApplicationContext(), getString(R.string.day_on_day),
-						Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.day_on_day), Toast.LENGTH_SHORT)
+							.show();
 				} else {
 					compareText.setText(getString(R.string.week_on_week));
-					Toast.makeText(getApplicationContext(), getString(R.string.week_on_week),
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.week_on_week),
 							Toast.LENGTH_SHORT).show();
 				}
 				break;
 			case RATE1:
-				if(dataType)
+				if (dataType)
 					initData();
-				else 
+				else
 					initData2();
 				la.notifyDataSetChanged();
 				loading.setVisibility(View.GONE);
 				if (dataType) {
 					consumeText.setText("小时consume(元)");
-					Toast.makeText(getApplicationContext(),
-							"小时consume(元)", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(getApplicationContext(), "小时consume(元)",
+							Toast.LENGTH_SHORT).show();
 				} else {
 					consumeText.setText("小时ECPM(元)");
-					Toast.makeText(getApplicationContext(),
-							"小时ecpm(元)",
+					Toast.makeText(getApplicationContext(), "小时ecpm(元)",
 							Toast.LENGTH_SHORT).show();
 				}
 				break;
 			case PARSE:
-				//Boolean flag = false;
-				if (dataType)	
+				// Boolean flag = false;
+				if (dataType)
 					initData();
 				else
 					initData2();
 				if (true) {
-				setAdapter();
-				bindListener();
-				setDateText();
-				compareText.setText(getString(R.string.day_on_day));
-				loading.setVisibility(View.GONE);
-				Toast.makeText(getApplicationContext(),
-						"刷新成功  " 
-//				+ dateText.getText()
-						, Toast.LENGTH_LONG)
-						.show();
+					setAdapter();
+					bindListener();
+					setDateText();
+					compareText.setText(getString(R.string.day_on_day));
+					loading.setVisibility(View.GONE);
+					Toast.makeText(getApplicationContext(),
+							"\t\t\t\t\t\t\t\t\t\t刷新成功\n" + dateText.getText(),
+							Toast.LENGTH_LONG).show();
 				}
 				break;
-			
+
 			}
 
 		}
@@ -483,7 +474,7 @@ public class HourActivity extends Activity {
 		setDate();
 		String date1 = dateFormat(year1, month1, day1);
 		String date2 = dateFormat(year2, month2, day2);
-		urlPram = "date1=" + date1 + "&hour=" + hour+"&";
+		urlPram = "date1=" + date1 + "&hour=" + hour + "&";
 		return urlPram;
 	}
 
@@ -498,11 +489,13 @@ public class HourActivity extends Activity {
 	public class ListItemAdapter extends BaseAdapter {
 		private List<HashMap<String, String>> list;
 		private LayoutInflater layoutInflater;
+
 		public ListItemAdapter(Context context,
 				List<HashMap<String, String>> list) {
-			this.list = list;		
+			this.list = list;
 			layoutInflater = LayoutInflater.from(context);
 		}
+
 		/**
 		 * 数据总数
 		 */
@@ -511,6 +504,7 @@ public class HourActivity extends Activity {
 
 			return list.size();
 		}
+
 		/**
 		 * 获取当前数据
 		 */
@@ -519,11 +513,13 @@ public class HourActivity extends Activity {
 
 			return list.get(position);
 		}
+
 		@Override
 		public long getItemId(int position) {
 
 			return position;
 		}
+
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
 			View row = convertView;
@@ -532,7 +528,7 @@ public class HourActivity extends Activity {
 				holder = new ViewHolder();
 				holder.t1 = (TextView) row.findViewById(R.id.t1);
 				holder.t2 = (TextView) row.findViewById(R.id.t2);
-				holder.t3 = (TextView) row.findViewById(R.id.t3);				
+				holder.t3 = (TextView) row.findViewById(R.id.t3);
 				holder.path = (TextView) row.findViewById(R.id.path);
 				row.setTag(holder);
 			} else {
@@ -544,18 +540,18 @@ public class HourActivity extends Activity {
 			String path = list.get(position).get("path");
 			holder.t1.setText(item);
 			holder.t2.setText(consume);
-			holder.t3.setText(rate);		
+			holder.t3.setText(rate);
 			holder.path.setText(path);
 			holder.t3.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					// TODO 自动生成的方法存根
-					day=!day;
-					myhandler.sendEmptyMessage(RATE);	
+					day = !day;
+					myhandler.sendEmptyMessage(RATE);
 				}
 			});
-			holder.t2.setOnClickListener(new OnClickListener() {				
+			holder.t2.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// TODO 自动生成的方法存根
@@ -563,21 +559,22 @@ public class HourActivity extends Activity {
 					myhandler.sendEmptyMessage(RATE1);
 				}
 			});
-		
+
 			if (rate.indexOf('-') != -1) {
 
-				holder.t3.setBackgroundColor(getResources().getColor(R.color.green));
+				holder.t3.setBackgroundColor(getResources().getColor(
+						R.color.green));
 			} else if (rate.equals("0.00%") || rate.equals("N/A")) {
 
-				holder.t3.setBackgroundColor(getResources().getColor(R.color.grey));
+				holder.t3.setBackgroundColor(getResources().getColor(
+						R.color.grey));
 			} else {
-				holder.t3.setBackgroundColor(getResources().getColor(R.color.red));
+				holder.t3.setBackgroundColor(getResources().getColor(
+						R.color.red));
 			}
 			return row;
 		}
 
-		
-		
 		class ViewHolder {
 			TextView t1;
 			TextView t2;
@@ -586,32 +583,32 @@ public class HourActivity extends Activity {
 		}
 
 	}
-	public String CalcEcpm(String str1,String str2,String str3)
-	{
-		float ecpm = 0 ;
-		BigDecimal  b;
-		if(Integer.parseInt(str2) == 0)
-		{
-			if(Integer.parseInt(str3) == 0)
-				 return "N/A";
+
+	public String CalcEcpm(String str1, String str2, String str3) {
+		float ecpm = 0;
+		BigDecimal b;
+		if (Integer.parseInt(str2) == 0) {
+			if (Integer.parseInt(str3) == 0)
+				return "N/A";
 			float data1 = Float.valueOf(str1);
 			float data2 = Float.valueOf(str3);
-			ecpm = data1 *1000/data2;
-		}
-		else 
-		{
+			ecpm = data1 * 1000 / data2;
+		} else {
 			try {
 				float data1 = Float.valueOf(str1);
 				float data2 = Float.valueOf(str2);
-			    ecpm = data1 * 1000 / data2;				   
+				ecpm = data1 * 1000 / data2;
 			} catch (Exception e) {
 				return "N/A";
 			}
 		}
 		b = new BigDecimal(ecpm);
-		return String.valueOf(b.setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());		
+		return String.valueOf(b.setScale(2, BigDecimal.ROUND_HALF_UP)
+				.floatValue());
 	}
+
 	private long exitTime = 0;
+
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
