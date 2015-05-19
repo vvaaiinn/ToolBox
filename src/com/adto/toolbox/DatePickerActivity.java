@@ -16,12 +16,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class DatePickerActivity extends Activity {
 	public DatePicker dp1 = null;
 	public DatePicker dp2 = null;
 	public NumberPicker np = null;
 	ApplicationData app;
+	Calendar c  ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,8 +36,8 @@ public class DatePickerActivity extends Activity {
 		np.setMaxValue(23);
 		np.setMinValue(0);
 		
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.HOUR_OF_DAY, -2);
+		c = Calendar.getInstance();
+		c.add(Calendar.HOUR_OF_DAY, -2	);
 		SharedPreferences settings = getSharedPreferences("setting", 0);
 		
 		if(app.isInit()){
@@ -50,22 +52,44 @@ public class DatePickerActivity extends Activity {
 		Button btn = (Button) findViewById(R.id.okBtn);
 		btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(DatePickerActivity.this,TabHostActivity.class);
+				app.setInit(false);
+				Intent intent;
 				SharedPreferences settings = getSharedPreferences("setting", 0);
 				SharedPreferences.Editor editor = settings.edit();
-				editor.putInt("year1", dp1.getYear());
-				editor.putInt("month1", dp1.getMonth());
-				editor.putInt("day1", dp1.getDayOfMonth());
-				editor.putInt("year2", dp2.getYear());
-				editor.putInt("month2", dp2.getMonth());
-				editor.putInt("day2", dp2.getDayOfMonth());
-				
-				editor.putInt("hour", np.getValue());
-				editor.commit();
-				intent.putExtra("load_date", "yes");
-				
-				app.setInit(false);
-				startActivity(intent);
+				String text = "该时间数据未产生";
+				if(dp1.getYear() > c.get(Calendar.YEAR) )
+				{
+					Toast.makeText(DatePickerActivity.this, text+"\t年份错误", Toast.LENGTH_LONG).show();					
+				}
+				else if(dp1.getMonth() > c.get(Calendar.MONTH))
+				{
+					Toast.makeText(DatePickerActivity.this, text+"\t月份错误", Toast.LENGTH_LONG).show();
+				}
+				else if(dp1.getDayOfMonth() > c.get(Calendar.DAY_OF_MONTH))
+				{
+					Toast.makeText(DatePickerActivity.this, text+"\t天数错误", Toast.LENGTH_LONG).show();
+				}
+				else if(np.getValue() > c.get(Calendar.HOUR_OF_DAY)+1)
+				{
+					System.out.println("heheheheheh"+c.get(Calendar.HOUR_OF_DAY));
+					Toast.makeText(DatePickerActivity.this, text+"\t时间错误", Toast.LENGTH_LONG).show();
+				}	
+				else
+				{
+					intent = new Intent(DatePickerActivity.this,TabHostActivity.class);
+					editor.putInt("year1", dp1.getYear());
+					editor.putInt("month1", dp1.getMonth());
+					editor.putInt("day1", dp1.getDayOfMonth());
+					editor.putInt("year2", dp2.getYear());
+					editor.putInt("month2", dp2.getMonth());
+					editor.putInt("day2", dp2.getDayOfMonth());
+					
+					editor.putInt("hour", np.getValue());
+					editor.commit();
+					intent.putExtra("load_date", "yes");				
+					startActivity(intent);
+					finish();
+				}
 				//DatePickerActivity.this.setResult(0,intent);
 				//finish();
 			}

@@ -38,7 +38,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.renderscript.Element.DataType;
 
-
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -94,23 +93,22 @@ public class MainActivity extends Activity {
 	String[] ids;
 	boolean isconnected = true;
 	boolean day = true;
-	
+
 	MainHandler myhandler;
 
 	private ApplicationData result;
 
-	
 	NetUtil netUtil;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		SysApplication.getInstance().addActivity(this);			
+		SysApplication.getInstance().addActivity(this);
 		result = (ApplicationData) getApplication();
 		setContentView(R.layout.activity_main);
 
 		compareText = (TextView) findViewById(R.id.compare2);
-		compare1 = (TextView)findViewById(R.id.compare1);
+		compare1 = (TextView) findViewById(R.id.compare1);
 		loading = (LinearLayout) findViewById(R.id.loading);
 		dateText = (TextView) findViewById(R.id.dateText);
 		myhandler = new MainHandler();
@@ -118,22 +116,22 @@ public class MainActivity extends Activity {
 
 		netUtil = new NetUtil(getApplicationContext());
 		if (dataType) {
-			compare1.setText("累计consume(元)");}
-		else 
+			compare1.setText("累计consume(元)");
+		} else
 			compare1.setText("累计ECPM(元)");
-	
+
 		if (!netUtil.isNetworkConnected()) {
 			isconnected = false;
 			Toast.makeText(getApplicationContext(), "网络异常，请检查网络",
 					Toast.LENGTH_SHORT).show();
 			loading.setVisibility(View.GONE);
-		} else {			
+		} else {
 			myhandler.sendEmptyMessage(QUEST);
 		}
-		bindListener();		
-		
+		bindListener();
+
 		compareText.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
@@ -142,27 +140,28 @@ public class MainActivity extends Activity {
 			}
 		});
 		compare1.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
 				dataType = !dataType;
 				myhandler.sendEmptyMessage(RATE1);
-				
+
 			}
 		});
 	}
 
 	public boolean initData() {
-		boolean success=true;
-		try {			
-			if(data!=null)data.clear();
+		boolean success = true;
+		try {
+			if (data != null)
+				data.clear();
 			SharedPreferences settings = getSharedPreferences("setting", 0);
 			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
 
 			JSONObject result = new JSONObject(res);
-			String status=result.getString("status");
-			if(status.equals("0")){
+			String status = result.getString("status");
+			if (status.equals("0")) {
 				JSONObject dayArray = result.getJSONObject("day");
 				JSONObject today = dayArray.getJSONObject("0");
 				JSONObject yesterday = dayArray.getJSONObject("1");
@@ -191,37 +190,39 @@ public class MainActivity extends Activity {
 							PrivateUtil.getPath(Integer.valueOf(id), catalog));
 					data.add(map);
 				}
-			}else{
-				Toast.makeText(getApplicationContext(), result.getString("description"),
-						Toast.LENGTH_LONG).show();
-				Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+			} else {
+				Toast.makeText(getApplicationContext(),
+						result.getString("description"), Toast.LENGTH_LONG)
+						.show();
+				Intent intent = new Intent(MainActivity.this,
+						LoginActivity.class);
 				startActivity(intent);
 				finish();
-				success=false;
+				success = false;
 			}
-			
+
 		} catch (Exception e) {
-			success=false;
+			success = false;
 			dateText.setText("err:" + e.getMessage());
 			e.printStackTrace();
 		}
 		return success;
 	}
-	
+
 	public boolean initData2() {
-		boolean success=true;
-		try {			
-			if(data!=null)data.clear();
+		boolean success = true;
+		try {
+			if (data != null)
+				data.clear();
 			SharedPreferences settings = getSharedPreferences("setting", 0);
 			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
 
-			for(String id:ids)
-			{
-				System.out.println("hahaha"+id);
+			for (String id : ids) {
+				System.out.println("hahaha" + id);
 			}
 			JSONObject result = new JSONObject(res);
-			String status=result.getString("status");
-			if(status.equals("0")){
+			String status = result.getString("status");
+			if (status.equals("0")) {
 				JSONObject dayArray = result.getJSONObject("day");
 				JSONObject today = dayArray.getJSONObject("0");
 				JSONObject yesterday = dayArray.getJSONObject("1");
@@ -234,44 +235,45 @@ public class MainActivity extends Activity {
 					JSONObject obj2 = yesterday.getJSONObject(id);
 					JSONObject obj3 = lastweek.getJSONObject(id);
 					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("item", obj.getString("name"));		
+					map.put("item", obj.getString("name"));
 					String d1 = obj.getString("consume");
-					String d2 = obj.getString("filter_pv");	
+					String d2 = obj.getString("filter_pv");
 					String d3 = obj.getString("pv");
-					map.put("consume", CalcEcpm(d1, d2,d3));
+					map.put("consume", CalcEcpm(d1, d2, d3));
 					String t1 = obj2.getString("consume");
-					String t2 = obj2.getString("filter_pv");	
-					String t3= obj.getString("pv");
+					String t2 = obj2.getString("filter_pv");
+					String t3 = obj.getString("pv");
 					map.put("rate",
-							rateFormat(CalcEcpm(d1, d2,d3),
-									CalcEcpm(t1, t2,t3)));
-					 t1 = obj3.getString("consume");
-					 t2 = obj3.getString("filter_pv");
-					 t3= obj.getString("pv");
-					 
+							rateFormat(CalcEcpm(d1, d2, d3),
+									CalcEcpm(t1, t2, t3)));
+					t1 = obj3.getString("consume");
+					t2 = obj3.getString("filter_pv");
+					t3 = obj.getString("pv");
+
 					if (!day) {
 						map.put("rate",
-								rateFormat(CalcEcpm(d1, d2,d3),
-										CalcEcpm(t1, t2,t3)));
+								rateFormat(CalcEcpm(d1, d2, d3),
+										CalcEcpm(t1, t2, t3)));
 					}
-					
+
 					map.put("path",
 							PrivateUtil.getPath(Integer.valueOf(id), catalog));
 					data.add(map);
 
-			
 				}
-			}else{
-				Toast.makeText(getApplicationContext(), result.getString("description"),
-						Toast.LENGTH_LONG).show();
-				Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+			} else {
+				Toast.makeText(getApplicationContext(),
+						result.getString("description"), Toast.LENGTH_LONG)
+						.show();
+				Intent intent = new Intent(MainActivity.this,
+						LoginActivity.class);
 				startActivity(intent);
 				finish();
-				success=false;
+				success = false;
 			}
-			
+
 		} catch (Exception e) {
-			success=false;
+			success = false;
 			dateText.setText("err:" + e.getMessage());
 			e.printStackTrace();
 		}
@@ -332,7 +334,6 @@ public class MainActivity extends Activity {
 		// dateText.setOnClickListener(new dateClickListener());
 	}
 
-	
 	public void setDate() {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.HOUR_OF_DAY, -2);
@@ -379,14 +380,21 @@ public class MainActivity extends Activity {
 				new Thread() {
 					public void run() {
 						try {
-							res = "";							
-							SharedPreferences settings = getSharedPreferences("setting", 0);
-							StringBuilder params=new StringBuilder();
-							params.append("phone="+settings.getString("phone", ""));
-							params.append("&validkey="+settings.getString("validkey", ""));
-							params.append("&ver="+VersionUtil.getVerName(getApplicationContext()));
+							res = "";
+							SharedPreferences settings = getSharedPreferences(
+									"setting", 0);
+							StringBuilder params = new StringBuilder();
+							params.append("phone="
+									+ settings.getString("phone", ""));
+							params.append("&validkey="
+									+ settings.getString("validkey", ""));
+							params.append("&ver="
+									+ VersionUtil
+											.getVerName(getApplicationContext()));
 
-							res = GetPostUtil.sendGet(Constants.URL+ "getContent.php", getDatePram()+params.toString());
+							res = GetPostUtil.sendGet(Constants.URL
+									+ "getContent.php",
+									getDatePram() + params.toString());
 							System.out.println(res);
 							catalog = GetPostUtil.sendGet(Constants.URL
 									+ "getBizlist.php", params.toString());
@@ -406,13 +414,11 @@ public class MainActivity extends Activity {
 				loading.setVisibility(View.GONE);
 				break;
 			case REFRESH:
-				
 				break;
-			case RATE://刷新日周比
-				
-				if(dataType)
+			case RATE:// 刷新日周比
+				if (dataType)
 					initData();
-				else 
+				else
 					initData2();
 				la.notifyDataSetChanged();
 				loading.setVisibility(View.GONE);
@@ -428,41 +434,37 @@ public class MainActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 				}
 				break;
-			case RATE1://刷新总体和ECPM
-				if(dataType)
+			case RATE1:// 刷新总体和ECPM
+				if (dataType)
 					initData();
-				else 
+				else
 					initData2();
 				la.notifyDataSetChanged();
 				loading.setVisibility(View.GONE);
 				if (dataType) {
 					compare1.setText("累计consume(元)");
-					Toast.makeText(getApplicationContext(),
-							"累计consume(元)", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(getApplicationContext(), "累计consume(元)",
+							Toast.LENGTH_SHORT).show();
 				} else {
 					compare1.setText("累计ECPM(元)");
-					Toast.makeText(getApplicationContext(),
-							"累计ECPM(元)",
+					Toast.makeText(getApplicationContext(), "累计ECPM(元)",
 							Toast.LENGTH_SHORT).show();
 				}
 				break;
 			case PARSE:
-				
-				if(dataType )
+
+				if (dataType)
 					initData();
-				else 
-					initData2();					
-				if(true){
-				setAdapter();
-				bindListener();
-				setDateText();
-				loading.setVisibility(View.GONE);
-				Toast.makeText(MainActivity.this,
-						"刷新成功  "
-				//+ dateText.getText()
-						, Toast.LENGTH_LONG)
-						.show();
+				else
+					initData2();
+				if (true) {
+					setAdapter();
+					bindListener();
+					setDateText();
+					loading.setVisibility(View.GONE);
+					Toast.makeText(MainActivity.this, "刷新成功  "
+					// + dateText.getText()
+							, Toast.LENGTH_LONG).show();
 				}
 				break;
 			}
@@ -484,33 +486,31 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 		}
 	}
-	public String CalcEcpm(String str1,String str2,String str3)
-	{
-		float ecpm = 0 ;
-		BigDecimal  b;
-		if(Integer.parseInt(str2) == 0)
-		{
-			if(Integer.parseInt(str3) == 0)
-					 return "N/A";
+
+	public String CalcEcpm(String str1, String str2, String str3) {
+		float ecpm = 0;
+		BigDecimal b;
+		if (Integer.parseInt(str2) == 0) {
+			if (Integer.parseInt(str3) == 0)
+				return "N/A";
 			float data1 = Float.valueOf(str1);
 			float data2 = Float.valueOf(str3);
-			ecpm = data1 *1000/data2;
-		}
-		else 
-		{
+			ecpm = data1 * 1000 / data2;
+		} else {
 			try {
 				float data1 = Float.valueOf(str1);
 				float data2 = Float.valueOf(str2);
-			    ecpm = data1 * 1000 / data2;	
-			    
+				ecpm = data1 * 1000 / data2;
+
 			} catch (Exception e) {
 				return "N/A";
 			}
 		}
 		b = new BigDecimal(ecpm);
-		return String.valueOf(b.setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
+		return String.valueOf(b.setScale(2, BigDecimal.ROUND_HALF_UP)
+				.floatValue());
 	}
-	
+
 	public String rateFormat(String str1, String str2) {
 		if (str2.equals("") || str2.equals("0"))
 			return "N/A";
@@ -536,7 +536,7 @@ public class MainActivity extends Activity {
 		setDate();
 		String date1 = dateFormat(year1, month1, day1);
 		String date2 = dateFormat(year2, month2, day2);
-		urlPram = "date1=" + date1 + "&hour=" + hour+"&";
+		urlPram = "date1=" + date1 + "&hour=" + hour + "&";
 		return urlPram;
 	}
 
@@ -547,25 +547,20 @@ public class MainActivity extends Activity {
 	public String intFormat(int i) {
 		return i > 9 ? String.valueOf(i) : ("0" + String.valueOf(i));
 	}
-	
-		
+
 	public class ListItemClickListener implements OnItemClickListener {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-//			Intent intent=new Intent(getApplicationContext(),ChartActivity.class);
-//			intent.putExtra("bizid", ids[position]);
-//			intent.putExtra("name", getName(ids[position]));
-//			startActivity(intent);
-			
-		}		
+			// Intent intent=new
+			// Intent(getApplicationContext(),ChartActivity.class);
+			// intent.putExtra("bizid", ids[position]);
+			// intent.putExtra("name", getName(ids[position]));
+			// startActivity(intent);
+
+		}
 	}
-	
-	
-	
-	
-	
 
 	public class ListItemLongClickListener implements OnItemLongClickListener {
 		@Override
@@ -659,6 +654,7 @@ public class MainActivity extends Activity {
 			layoutInflater = LayoutInflater.from(context);
 
 		}
+
 		/**
 		 * 数据总数
 		 */
@@ -667,6 +663,7 @@ public class MainActivity extends Activity {
 
 			return list.size();
 		}
+
 		/**
 		 * 获取当前数据
 		 */
@@ -675,10 +672,12 @@ public class MainActivity extends Activity {
 
 			return list.get(position);
 		}
+
 		@Override
 		public long getItemId(int position) {
 			return position;
 		}
+
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
 			View row = convertView;
@@ -699,13 +698,13 @@ public class MainActivity extends Activity {
 			String rate = list.get(position).get("rate");
 
 			String path = list.get(position).get("path");
-     
+
 			holder.t1.setText(item);
 			holder.t2.setText(consume);
 			holder.t3.setText(rate);
 			holder.path.setText(path);
 
-			holder.t2.setOnClickListener(new OnClickListener() {				
+			holder.t2.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// TODO 自动生成的方法存根
@@ -713,12 +712,12 @@ public class MainActivity extends Activity {
 					myhandler.sendEmptyMessage(RATE1);
 				}
 			});
-			holder.t3.setOnClickListener(new OnClickListener() {				
+			holder.t3.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// TODO 自动生成的方法存根
-					day=!day;
-					myhandler.sendEmptyMessage(RATE);	
+					day = !day;
+					myhandler.sendEmptyMessage(RATE);
 				}
 			});
 

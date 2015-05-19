@@ -113,7 +113,7 @@ public class EditActivity extends Activity {
 					deleteText.setText("删除");
 					selectAll.setChecked(false);
 				} else {
-					Toast.makeText(EditActivity.this, "请选择", Toast.LENGTH_SHORT)
+					Toast.makeText(EditActivity.this, "请选择要删除的选项", Toast.LENGTH_SHORT)
 							.show();
 				}
 			}
@@ -137,6 +137,7 @@ public class EditActivity extends Activity {
 				Intent intent = new Intent(EditActivity.this,
 						ListActivity.class);
 				startActivity(intent);
+				finish();
 				overridePendingTransition(R.anim.in_from_right,
 						R.anim.out_to_left);
 			}
@@ -298,7 +299,7 @@ public class EditActivity extends Activity {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 
-			Intent intent = new Intent(EditActivity.this, MainActivity.class);
+			Intent intent = new Intent(EditActivity.this, TabHostActivity.class);
 			intent.putExtra("load_date", "yes");
 			startActivity(intent);
 			overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
@@ -361,7 +362,6 @@ public class EditActivity extends Activity {
 			return false;
 		}
 
-
 		public int getSelectedSize() {
 		
 			deleteIds = "";
@@ -410,7 +410,6 @@ public class EditActivity extends Activity {
 			String id = list.get(position).get("id");
 			String path = list.get(position).get("path");
 			holder.check.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
 						@Override
 						public void onCheckedChanged(CompoundButton buttonView,
 								boolean isChecked) {
@@ -467,5 +466,7 @@ public class EditActivity extends Activity {
 			selectAllText.setTextColor(getResources().getColor(R.color.white));
 		}
 	}
+	
+
 
 }

@@ -273,7 +273,7 @@ public class ListActivity extends Activity {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 
-			Intent intent = new Intent(ListActivity.this, MainActivity.class);
+			Intent intent = new Intent(ListActivity.this, TabHostActivity.class);
 			intent.putExtra("load_date", "yes");
 			startActivity(intent);
 			overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
