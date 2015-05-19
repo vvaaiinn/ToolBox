@@ -1,0 +1,85 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        tools:context="com.adto.toolbox.SumActivity" >
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日期："
+            android:textColor="#fff"
+            android:textSize="20sp" >
+        </TextView>
+
+        <DatePicker
+            android:id="@+id/date1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text1" >
+        </DatePicker>
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date1"
+            android:text="日期二："
+            android:textColor="#fff"
+            android:visibility="gone"
+            android:textSize="20sp" >
+        </TextView>
+
+        <DatePicker
+            android:id="@+id/date2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/text2" >
+        </DatePicker>
+
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date2"
+            android:text="小时："
+            android:textColor="#fff"
+            android:textSize="20sp" >
+        </TextView>
+
+       
+  <NumberPicker
+      android:id="@+id/np"
+      android:layout_centerInParent="true"
+      android:layout_below="@id/text3"
+      android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:showDividers="middle"
+      ></NumberPicker>
+
+        <Button
+            android:id="@+id/okBtn"
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/np"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dip"
+            android:background="#e87c07"
+            android:paddingBottom="5dip"
+            android:paddingTop="5dip"
+            android:text="OK"
+            android:textColor="#fff"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</ScrollView>

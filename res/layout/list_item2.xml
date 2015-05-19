@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="7dp"
+    android:paddingTop="7dp"
+    tools:context="com.adto.toolbox.MainActivity" >
+
+    <TextView
+        android:id="@+id/t1"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/content_margin"
+        android:gravity="left"
+        
+        android:textColor="@color/dataText"
+        android:textSize="@dimen/font_size" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/t2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="80dp"
+        android:gravity="right"
+        android:textStyle="bold"
+        android:layout_centerInParent="true"
+         android:textColor="@color/dataText"
+        android:textSize="18sp" >
+    </TextView>
+    
+     <TextView
+        android:id="@+id/t3"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:layout_marginRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/dataText"
+        android:textSize="@dimen/font_size" >
+    </TextView>
+    
+    <TextView
+        android:id="@+id/path"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/t1"
+        android:layout_marginLeft="@dimen/content_margin"
+        android:gravity="left"
+        android:textColor="#999"
+        android:textSize="10sp" >
+    </TextView>
+
+</RelativeLayout>

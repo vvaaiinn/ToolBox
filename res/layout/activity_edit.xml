@@ -1,0 +1,180 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBG"
+    tools:context="com.adto.toolbox.EditActivity" >
+
+    <RelativeLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appColor"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp" >
+
+        <TextView
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="完成"
+            android:textColor="@color/listTitle"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/title_main"
+            android:textColor="#fff"
+            android:textSize="18sp" >
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/add" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleLayout"
+        android:background="@color/listTitleBG2"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <TextView
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+
+            android:text="请选择"
+            android:textColor="@color/listTitle"
+            android:visibility="invisible"
+            android:textSize="15sp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/business"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/content_margin"
+            android:layout_toRightOf="@id/check"
+            android:gravity="left"
+            android:text="@string/comp_title"
+            android:textColor="@color/listTitle"
+            android:textSize="@dimen/text_size" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="right"
+            android:minWidth="80dp"
+            android:text="@string/top"
+            android:textColor="@color/listTitle"
+            android:visibility="invisible"
+            android:textSize="@dimen/text_size" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/drag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/content_margin"
+            android:gravity="right"
+            android:text="@string/drag"
+            android:textColor="@color/listTitle"
+            android:textSize="@dimen/text_size" >
+        </TextView>
+    </RelativeLayout>
+
+    
+    <com.adto.view.DragListView 
+        android:id="@+id/drag_list" 
+        android:layout_below="@id/title"
+       android:layout_width="fill_parent" 
+       android:layout_height="fill_parent"
+       android:paddingBottom="50dp"
+       android:cacheColorHint="#00000000"
+        ></com.adto.view.DragListView>
+
+    <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/loading" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminate="true"
+            android:indeterminateDuration="3500" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/editBox"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:layout_alignParentBottom="true"
+        android:background="@color/appColor">
+
+        <CheckBox
+            android:id="@+id/selectall"
+            android:layout_alignParentLeft="true"
+            android:button="@drawable/checkbox_bg"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent" />
+
+        <TextView
+            android:id="@+id/selectAllText"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_toRightOf="@id/selectall"
+            android:gravity="center_vertical"
+            android:textColor="@color/grey"
+            android:textSize="17sp"
+            android:layout_marginLeft="7dp"
+            android:text="全选" />
+        
+        <TextView
+            android:id="@+id/deleteText"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+          
+            android:layout_alignParentRight="true"
+            android:gravity="fill_vertical"
+            android:textColor="@color/grey"
+            android:textSize="17sp"
+            android:layout_marginRight="7dp"
+            android:text="删除" />
+    </RelativeLayout>
+
+</RelativeLayout>

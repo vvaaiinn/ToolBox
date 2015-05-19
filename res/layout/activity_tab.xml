@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_weight="1.0" />
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.0"
+            android:visibility="gone" />
+
+        <RadioGroup
+            android:id="@+id/main_radio"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="#232323"
+            android:gravity="center"
+            android:orientation="horizontal" >
+            <RadioButton
+                android:id="@+id/accumulation"
+                style="@style/main_tab_bottom"
+                android:layout_gravity="center_vertical"
+                android:tag="accumulation"
+                android:textColor="#999"
+                android:text="累计"              
+                android:checked="true" />
+            <RadioButton
+                android:id="@+id/hour"
+                style="@style/main_tab_bottom"
+                android:layout_gravity="center_vertical"
+                 android:textColor="#999"
+                android:tag="hour"
+                android:text="小时"              
+                />
+            <RadioButton
+                android:id="@+id/myinfo"
+                style="@style/main_tab_bottom"
+                android:layout_gravity="center_vertical"
+                 android:textColor="#999"
+                android:tag="myinfo"
+                android:text="个人"
+                />
+
+        </RadioGroup>
+    </LinearLayout>
+
+</TabHost>

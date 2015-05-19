@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="appColor">#333333</color>
+    <color name="appColor_BLUE">#26a0fe</color>
+    <color name="appBG">#000000</color>
+    <color name="listTitleBG">#333333</color>
+    <color name="listTitleBG2">#222222</color>
+    <color name="listTitleBG_BLUE">#5cb8ff</color>
+    <color name="listTitle">#4594d0</color>
+    <color name="dataText">#ffffff</color>
+    <color name="text">#333</color>
+    <color name="categoryBG">#eeeeee</color>
+    
+    <color name="red">#a33200</color>
+     <color name="green">#1e5902</color>
+     <color name="blue">#3c739e</color>
+     <color name="white">#ffffff</color>
+     <color name="grey">#666666</color>
+</resources>

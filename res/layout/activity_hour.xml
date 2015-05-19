@@ -1,0 +1,167 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBG"
+    tools:ignore="UselessParent" >
+
+    <RelativeLayout
+        android:id="@+id/mainBox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/activityTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/appColor"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp" >
+
+                <TextView
+                    android:id="@+id/edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="编辑"
+                    android:textColor="@color/listTitle"
+                    android:textSize="@dimen/text_size" />
+
+                <ImageButton
+                    android:id="@+id/calendarBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@id/edit"
+                    android:background="@drawable/calendar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="收入监控"
+                    android:textColor="#fff"
+                    android:textSize="20sp" >
+                </TextView>
+
+                <ImageButton
+                    android:id="@+id/add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/add" />
+
+                <ImageButton
+                    android:id="@+id/update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_toLeftOf="@id/add"
+                    android:background="@drawable/update" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/listTitleBG2"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/business"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="@dimen/content_margin"
+                    android:gravity="left"
+                    android:text="@string/comp_title"
+                    android:textColor="@color/listTitle"
+                    android:textSize="@dimen/text_size" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/compare1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="right"
+                    android:minWidth="80dp"
+                    android:text="@string/hour_income"
+                    android:textColor="@color/listTitle"
+                    android:textSize="@dimen/text_size" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/compare2"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="30dp"
+                    android:gravity="right"
+                    android:text="@string/day_on_day"
+                    android:textColor="@color/listTitle"
+                    android:textSize="@dimen/text_size" >
+                </TextView>
+            </RelativeLayout>
+        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/loading"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/linearLayout"
+                android:orientation="horizontal"
+                 >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/loading" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:indeterminate="true"
+                    android:indeterminateDuration="3500" />
+            </LinearLayout>
+
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayout" />
+
+        <TextView
+            android:id="@+id/dateText"
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/appColor"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dip"
+            android:paddingTop="10dip"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:visibility="invisible" >
+        </TextView>
+
+     
+    </RelativeLayout>
+
+</FrameLayout>

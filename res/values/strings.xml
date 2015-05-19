@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">iMonitor</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_sum">choose date</string>
+    <string name="title_activity_hour">HourActivity</string>
+    <string name="title_activity_date_picker">日期选择</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_set">SetActivity</string>
+    <string name="delete">删除业务</string>
+    <string name="title_main">收入监控</string>
+    <string name="comp_title">业务类型</string>
+    <string name="hour_income">小时收入(元)</string>
+    <string name="day_on_day">日环比</string>
+    <string name="week_on_week">周同比</string>
+    <string name="day_income">累计consume(元)</string>
+    <string name="loading">正在加载</string>
+    <string name="top">置顶</string>
+    <string name="drag">拖动</string>
+    <string name="title_activity_tab">TabActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+    <string name="logout">退出</string>
+    <string name="phone">请输入     手机号</string>
+    <string name="name">请输入    姓名</string>
+    <string name="number">请输入    工号</string>
+    <string name="leader">请输入    主管</string>
+    <string name="dept">请输入    部门</string>
+    <string name="captcha">请输入    验证码</string>
+    <string name="send">发送验证码</string>
+    <string name="title_activity_private">PrivateActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_myinfo">MyinfoActivity</string>
+    <string name="title_activity_chart">ChartActivity</string>
+
+</resources>

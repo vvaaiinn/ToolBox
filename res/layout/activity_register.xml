@@ -1,0 +1,201 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:background="@color/appColor_BLUE" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="用户注册"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/loginText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/login"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:layout_marginRight="30dip"
+            android:layout_marginTop="30dip"
+            android:background="@drawable/corner_bg"
+            android:padding="20dip" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/row_padding"
+                android:paddingTop="@dimen/row_padding" >
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/editbox_height"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/edit_box"
+                    android:gravity="center_vertical"
+                    android:hint="@string/phone"
+                    android:numeric="integer"
+                    android:padding="5dip"
+                    android:singleLine="true"
+                    android:textColor="#666"
+                    android:textSize="15sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/row_padding"
+                android:paddingTop="@dimen/row_padding" >
+
+                <EditText
+                    android:id="@+id/captcha"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/editbox_height"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/edit_box"
+                    android:gravity="center_vertical"
+                    android:hint="@string/captcha"
+                    android:numeric="integer"
+                    android:padding="5dip"
+                    android:singleLine="true"
+                    android:textColor="#666"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/sendcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/editbox_height"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/btn_blue"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/send"
+                    android:textColor="#fff"
+                    android:textSize="15sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/row_padding"
+                android:paddingTop="@dimen/row_padding" >
+
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/editbox_height"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/edit_box"
+                    android:gravity="center_vertical"
+                    android:hint="@string/name"
+                    android:padding="5dip"
+                    android:singleLine="true"
+                    android:textColor="#666"
+                    android:textSize="15sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/row_padding"
+                android:paddingTop="@dimen/row_padding" >
+
+                <EditText
+                    android:id="@+id/number"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/editbox_height"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/edit_box"
+                    android:gravity="center_vertical"
+                    android:hint="@string/number"
+                    android:padding="5dip"
+                    android:singleLine="true"
+                    android:textColor="#666"
+                    android:textSize="15sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/row_padding"
+                android:paddingTop="@dimen/row_padding" >
+
+                <EditText
+                    android:id="@+id/leader"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/editbox_height"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/edit_box"
+                    android:gravity="center_vertical"
+                    android:hint="@string/leader"
+                    android:padding="5dip"
+                    android:singleLine="true"
+                    android:textColor="#666"
+                    android:textSize="15sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/row_padding"
+                android:paddingTop="@dimen/row_padding" >
+
+                <EditText
+                    android:id="@+id/dept"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/editbox_height"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/edit_box"
+                    android:gravity="center_vertical"
+                    android:hint="@string/dept"
+                    android:padding="5dip"
+                    android:singleLine="true"
+                    android:textColor="#666"
+                    android:textSize="15sp" />
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:id="@+id/registerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dip"
+            android:background="@drawable/btn"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dip"
+            android:paddingRight="30dip"
+            android:text="@string/register"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+</ScrollView>

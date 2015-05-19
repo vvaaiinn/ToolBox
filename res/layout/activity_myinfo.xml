@@ -1,0 +1,90 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/appBG" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+             >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="用户信息"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/logoutText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/logout"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+        </RelativeLayout>
+        
+        <LinearLayout 
+            
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            ></LinearLayout>
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:layout_marginRight="30dip"
+            android:layout_marginTop="30dip"
+            android:background="@drawable/corner_black_bg"
+            android:padding="20dip" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="@dimen/row_padding"
+                android:paddingTop="@dimen/row_padding" >
+
+                <ImageView 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon"
+                    />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="@dimen/row_padding"
+                android:paddingTop="@dimen/row_padding" >
+
+                <TextView 
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   android:textColor="@color/dataText"
+                    />
+            </TableRow>
+
+
+        </TableLayout>
+
+    
+    </LinearLayout>
+
+</ScrollView>
