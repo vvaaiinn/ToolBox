@@ -60,7 +60,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-import com.adto.adapter.ListItemAdapter;
+//import com.adto.adapter.ListItemAdapter;
 import com.adto.entity.Constants;
 import com.adto.entity.UpdateInfo;
 import com.adto.util.PrivateUtil;
@@ -105,12 +105,8 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		SysApplication.getInstance().addActivity(this);
-		
-
-		
+		SysApplication.getInstance().addActivity(this);			
 		result = (ApplicationData) getApplication();
-
 		setContentView(R.layout.activity_main);
 
 		compareText = (TextView) findViewById(R.id.compare2);
@@ -119,25 +115,22 @@ public class MainActivity extends Activity {
 		dateText = (TextView) findViewById(R.id.dateText);
 		myhandler = new MainHandler();
 		data = new ArrayList<HashMap<String, String>>();
+
 		netUtil = new NetUtil(getApplicationContext());
 		if (dataType) {
 			compare1.setText("累计consume(元)");}
 		else 
 			compare1.setText("累计ECPM(元)");
-	 
-				
-		
+	
 		if (!netUtil.isNetworkConnected()) {
 			isconnected = false;
 			Toast.makeText(getApplicationContext(), "网络异常，请检查网络",
 					Toast.LENGTH_SHORT).show();
 			loading.setVisibility(View.GONE);
-		} else {
-			
+		} else {			
 			myhandler.sendEmptyMessage(QUEST);
 		}
-		bindListener();
-		
+		bindListener();		
 		
 		compareText.setOnClickListener(new OnClickListener() {
 			
@@ -194,11 +187,9 @@ public class MainActivity extends Activity {
 								rateFormat(obj.getString("consume"),
 										obj3.getString("consume")));
 					}
-
 					map.put("path",
 							PrivateUtil.getPath(Integer.valueOf(id), catalog));
 					data.add(map);
-
 				}
 			}else{
 				Toast.makeText(getApplicationContext(), result.getString("description"),
@@ -224,6 +215,10 @@ public class MainActivity extends Activity {
 			SharedPreferences settings = getSharedPreferences("setting", 0);
 			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
 
+			for(String id:ids)
+			{
+				System.out.println("hahaha"+id);
+			}
 			JSONObject result = new JSONObject(res);
 			String status=result.getString("status");
 			if(status.equals("0")){
@@ -380,7 +375,6 @@ public class MainActivity extends Activity {
 	public class MainHandler extends Handler {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-
 			case QUEST:
 				new Thread() {
 					public void run() {
@@ -412,10 +406,10 @@ public class MainActivity extends Activity {
 				loading.setVisibility(View.GONE);
 				break;
 			case REFRESH:
-
 				
 				break;
-			case RATE:
+			case RATE://刷新日周比
+				
 				if(dataType)
 					initData();
 				else 
@@ -434,7 +428,7 @@ public class MainActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 				}
 				break;
-			case RATE1:
+			case RATE1://刷新总体和ECPM
 				if(dataType)
 					initData();
 				else 
@@ -453,14 +447,13 @@ public class MainActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 				}
 				break;
-
 			case PARSE:
-				Boolean flag = false;
+				
 				if(dataType )
-					flag = initData();
+					initData();
 				else 
-					flag = initData2();					
-				if(flag){
+					initData2();					
+				if(true){
 				setAdapter();
 				bindListener();
 				setDateText();
@@ -497,6 +490,8 @@ public class MainActivity extends Activity {
 		BigDecimal  b;
 		if(Integer.parseInt(str2) == 0)
 		{
+			if(Integer.parseInt(str3) == 0)
+					 return "N/A";
 			float data1 = Float.valueOf(str1);
 			float data2 = Float.valueOf(str3);
 			ecpm = data1 *1000/data2;
@@ -508,7 +503,9 @@ public class MainActivity extends Activity {
 				float data2 = Float.valueOf(str2);
 			    ecpm = data1 * 1000 / data2;	
 			    
-			} catch (Exception e) {	}
+			} catch (Exception e) {
+				return "N/A";
+			}
 		}
 		b = new BigDecimal(ecpm);
 		return String.valueOf(b.setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
@@ -551,8 +548,7 @@ public class MainActivity extends Activity {
 		return i > 9 ? String.valueOf(i) : ("0" + String.valueOf(i));
 	}
 	
-	
-	
+		
 	public class ListItemClickListener implements OnItemClickListener {
 
 		@Override
@@ -659,13 +655,10 @@ public class MainActivity extends Activity {
 
 		public ListItemAdapter(Context context,
 				List<HashMap<String, String>> list) {
-
 			this.list = list;
-
 			layoutInflater = LayoutInflater.from(context);
 
 		}
-
 		/**
 		 * 数据总数
 		 */
@@ -674,7 +667,6 @@ public class MainActivity extends Activity {
 
 			return list.size();
 		}
-
 		/**
 		 * 获取当前数据
 		 */
@@ -683,13 +675,10 @@ public class MainActivity extends Activity {
 
 			return list.get(position);
 		}
-
 		@Override
 		public long getItemId(int position) {
-
 			return position;
 		}
-
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
 			View row = convertView;
@@ -716,8 +705,7 @@ public class MainActivity extends Activity {
 			holder.t3.setText(rate);
 			holder.path.setText(path);
 
-			holder.t2.setOnClickListener(new OnClickListener() {
-				
+			holder.t2.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
 					// TODO 自动生成的方法存根
@@ -725,8 +713,7 @@ public class MainActivity extends Activity {
 					myhandler.sendEmptyMessage(RATE1);
 				}
 			});
-			holder.t3.setOnClickListener(new OnClickListener() {
-				
+			holder.t3.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
 					// TODO 自动生成的方法存根
@@ -750,8 +737,6 @@ public class MainActivity extends Activity {
 
 			return row;
 		}
-
-		
 
 		class ViewHolder {
 			TextView t1;

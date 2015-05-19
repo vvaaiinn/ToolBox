@@ -74,7 +74,7 @@ public class HourActivity extends Activity {
 	public static final int RATE = 4;
 	public static final int PARSE = 5;
 	public static final int RATE1 = 6;
-	public static boolean dataType = true;
+    boolean dataType = true;
 	String res = "";
 	String catalog = "";
 	String url = "";
@@ -82,7 +82,7 @@ public class HourActivity extends Activity {
 	String phone,validkey;
 	boolean isconnected = true;
 	boolean day=true;
-
+	
 	MainHandler myhandler;
 
 	private ApplicationData result;
@@ -195,11 +195,10 @@ public class HourActivity extends Activity {
 			data.clear();
 			SharedPreferences settings = getSharedPreferences("setting", 0);
 			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
-
+			
 			JSONObject result = new JSONObject(res);
 			String status=result.getString("status");
-			if(status.equals("0")){
-			
+			if(status.equals("0")){			
 			JSONObject hourArray = result.getJSONObject("hour");
 			JSONObject today = hourArray.getJSONObject("0");
 			JSONObject yesterday = hourArray.getJSONObject("1");
@@ -378,9 +377,9 @@ public class HourActivity extends Activity {
 				break;
 			case REFRESH:
 				
-				
-				result.setRes(res);
-				initData();
+//				
+//				result.setRes(res);
+//				initData();
 
 				break;
 			case RATE:				
@@ -420,19 +419,21 @@ public class HourActivity extends Activity {
 				}
 				break;
 			case PARSE:
-				Boolean flag = false;
-				if (dataType)
-					flag = initData();
+				//Boolean flag = false;
+				if (dataType)	
+					initData();
 				else
-					flag = initData2();
-				if (flag) {
+					initData2();
+				if (true) {
 				setAdapter();
 				bindListener();
 				setDateText();
 				compareText.setText(getString(R.string.day_on_day));
 				loading.setVisibility(View.GONE);
 				Toast.makeText(getApplicationContext(),
-						"刷新成功  " + dateText.getText(), Toast.LENGTH_LONG)
+						"刷新成功  " 
+//				+ dateText.getText()
+						, Toast.LENGTH_LONG)
 						.show();
 				}
 				break;
@@ -495,21 +496,13 @@ public class HourActivity extends Activity {
 	}
 
 	public class ListItemAdapter extends BaseAdapter {
-
 		private List<HashMap<String, String>> list;
-
 		private LayoutInflater layoutInflater;
-
-
 		public ListItemAdapter(Context context,
 				List<HashMap<String, String>> list) {
-
-			this.list = list;
-		
+			this.list = list;		
 			layoutInflater = LayoutInflater.from(context);
-
 		}
-
 		/**
 		 * 数据总数
 		 */
@@ -518,7 +511,6 @@ public class HourActivity extends Activity {
 
 			return list.size();
 		}
-
 		/**
 		 * 获取当前数据
 		 */
@@ -527,24 +519,20 @@ public class HourActivity extends Activity {
 
 			return list.get(position);
 		}
-
 		@Override
 		public long getItemId(int position) {
 
 			return position;
 		}
-
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
 			View row = convertView;
-
 			if (convertView == null) {
 				row = layoutInflater.inflate(R.layout.list_item, null);
 				holder = new ViewHolder();
 				holder.t1 = (TextView) row.findViewById(R.id.t1);
 				holder.t2 = (TextView) row.findViewById(R.id.t2);
-				holder.t3 = (TextView) row.findViewById(R.id.t3);
-				
+				holder.t3 = (TextView) row.findViewById(R.id.t3);				
 				holder.path = (TextView) row.findViewById(R.id.path);
 				row.setTag(holder);
 			} else {
@@ -554,13 +542,10 @@ public class HourActivity extends Activity {
 			String consume = list.get(position).get("consume");
 			String rate = list.get(position).get("rate");
 			String path = list.get(position).get("path");
-
 			holder.t1.setText(item);
 			holder.t2.setText(consume);
-			holder.t3.setText(rate);
-		
+			holder.t3.setText(rate);		
 			holder.path.setText(path);
-
 			holder.t3.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -570,8 +555,7 @@ public class HourActivity extends Activity {
 					myhandler.sendEmptyMessage(RATE);	
 				}
 			});
-			holder.t2.setOnClickListener(new OnClickListener() {
-				
+			holder.t2.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
 					// TODO 自动生成的方法存根
@@ -580,7 +564,6 @@ public class HourActivity extends Activity {
 				}
 			});
 		
-
 			if (rate.indexOf('-') != -1) {
 
 				holder.t3.setBackgroundColor(getResources().getColor(R.color.green));
@@ -609,6 +592,8 @@ public class HourActivity extends Activity {
 		BigDecimal  b;
 		if(Integer.parseInt(str2) == 0)
 		{
+			if(Integer.parseInt(str3) == 0)
+				 return "N/A";
 			float data1 = Float.valueOf(str1);
 			float data2 = Float.valueOf(str3);
 			ecpm = data1 *1000/data2;
@@ -619,7 +604,9 @@ public class HourActivity extends Activity {
 				float data1 = Float.valueOf(str1);
 				float data2 = Float.valueOf(str2);
 			    ecpm = data1 * 1000 / data2;				   
-			} catch (Exception e) {	}
+			} catch (Exception e) {
+				return "N/A";
+			}
 		}
 		b = new BigDecimal(ecpm);
 		return String.valueOf(b.setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());		
