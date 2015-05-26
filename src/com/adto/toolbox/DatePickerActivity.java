@@ -78,7 +78,7 @@ public class DatePickerActivity extends Activity {
 				} else if ((dp1.getMonth() == c.get(Calendar.MONTH)
 						&& (dp1.getYear() == c.get(Calendar.YEAR))
 						&& (dp1.getDayOfMonth() == c.get(Calendar.DAY_OF_MONTH)) && (np
-						.getValue() > c.get(Calendar.HOUR_OF_DAY) + 1))) {
+						.getValue() > c.get(Calendar.HOUR_OF_DAY)))) {
 					// System.out.println("heheheheheh"
 					// + c.get(Calendar.HOUR_OF_DAY));
 					Toast.makeText(DatePickerActivity.this, text + "\tÊ±¼ä´íÎó",

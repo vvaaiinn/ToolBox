@@ -5,32 +5,17 @@ import java.util.TimerTask;
 
 import org.json.JSONObject;
 
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-
-import com.adto.entity.Constants;
-import com.adto.util.EncryptUtil;
-import com.adto.util.GetPostUtil;
-import com.adto.util.IsConnectity;
-import com.adto.util.NetUtil;
-import com.adto.util.SysApplication;
-import com.adto.util.VersionUtil;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -38,6 +23,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+
+import com.adto.entity.Constants;
+import com.adto.util.EncryptUtil;
+import com.adto.util.GetPostUtil;
+import com.adto.util.NetUtil;
+import com.adto.util.SysApplication;
+import com.adto.util.VersionUtil;
 
 public class LoginActivity extends Activity {
 
@@ -65,9 +59,14 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		SysApplication.getInstance().addActivity(this);
 		setContentView(R.layout.activity_login);
+		phoneEdit = (EditText) findViewById(R.id.phone);
+		captchaEdit = (EditText) findViewById(R.id.captcha);
+		register = (TextView) findViewById(R.id.registerText);
+		loginBtn = (Button) findViewById(R.id.loginBtn);
+		sendBtn = (Button) findViewById(R.id.sendcode);
 		initView();
 	}
 
@@ -101,6 +100,7 @@ public class LoginActivity extends Activity {
 					Message msg = new Message();
 					msg.what = ERROR;
 					msg.setData(b);
+
 					myHandler.sendMessage(msg);
 					Log.e("unkown err", data.toString());
 				}
@@ -113,11 +113,8 @@ public class LoginActivity extends Activity {
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 						| WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-		phoneEdit = (EditText) findViewById(R.id.phone);
-		captchaEdit = (EditText) findViewById(R.id.captcha);
 		netUtil = new NetUtil(getApplicationContext());
 
-		register = (TextView) findViewById(R.id.registerText);
 		register.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(LoginActivity.this,
@@ -126,19 +123,22 @@ public class LoginActivity extends Activity {
 			}
 		});
 
-		loginBtn = (Button) findViewById(R.id.loginBtn);
 		loginBtn.setOnClickListener(listener_login);
 
-		sendBtn = (Button) findViewById(R.id.sendcode);
 		sendBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Log.e("send", "send code");
 				if (!phoneEdit.getText().toString().trim().equals("")) {
-					sendBtn.setClickable(false);
-					sendBtn.setBackground(getResources().getDrawable(
-							R.drawable.btn_unable));
+					if (phoneEdit.getText().toString().length() == 11) {
+						phoneEdit.setBackground(getResources().getDrawable(
+								R.drawable.edit_box));
+						sendBtn.setClickable(false);
+						sendBtn.setBackground(getResources().getDrawable(
+								R.drawable.btn_unable));
+					}
 					SMSSDK.getVerificationCode("86", phoneEdit.getText()
 							.toString());
+
 				} else {
 					phoneEdit.setBackground(getResources().getDrawable(
 							R.drawable.err_box));
@@ -163,6 +163,22 @@ public class LoginActivity extends Activity {
 
 					Log.e("login", "login here");
 
+				}
+			} else {
+				if (phoneEdit.getText().toString().length() > 11) {
+					phoneEdit.setBackground(getResources().getDrawable(
+							R.drawable.err_box));
+					Toast.makeText(getApplicationContext(), "非法手机号",
+							Toast.LENGTH_LONG).show();
+				} else {
+					if (phoneEdit.getText().toString().length() < 11) {
+						phoneEdit.setBackground(getResources().getDrawable(
+								R.drawable.err_box));
+						phoneEdit.requestFocus();
+					} else
+						captchaEdit.requestFocus();
+					Toast.makeText(getApplicationContext(), "请填写全信息",
+							Toast.LENGTH_LONG).show();
 				}
 			}
 		}
@@ -193,28 +209,27 @@ public class LoginActivity extends Activity {
 		return valid;
 	}
 
-	
-
 	public void afterSend() {
 		Toast.makeText(getApplicationContext(), "验证码已发送，请查收", Toast.LENGTH_LONG)
 				.show();
 		timer = new Timer();
-		timer.schedule(new TimerTask(){
-			int seconds=60;
-			public void run(){
-				if(seconds>0){
-					Message msg=new Message();
-					Bundle b=new Bundle();
-					b.putInt("data",seconds--);
+		timer.schedule(new TimerTask() {
+			int seconds = 60;
+
+			public void run() {
+				if (seconds > 0) {
+					Message msg = new Message();
+					Bundle b = new Bundle();
+					b.putInt("data", seconds--);
 					msg.setData(b);
-					msg.what=TIMER;
+					msg.what = TIMER;
 					myHandler.sendMessage(msg);
-				}else{
+				} else {
 					myHandler.sendEmptyMessage(RESET);
 					this.cancel();
 				}
 			}
-		}, 0,1000);
+		}, 0, 1000);
 	}
 
 	public void loginAction() {
@@ -222,15 +237,15 @@ public class LoginActivity extends Activity {
 		String url = Constants.URL + "login.php";
 		StringBuilder params = new StringBuilder();
 		WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		String mac ="macnull";
-		if(wm!=null){
-			mac=wm.getConnectionInfo().getMacAddress();
+		String mac = "macnull";
+		if (wm != null) {
+			mac = wm.getConnectionInfo().getMacAddress();
 		}
 		BluetoothAdapter m_BluetoothAdapter = null;
 		m_BluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		String bluemac ="bluenull";
-		if(m_BluetoothAdapter!=null){
-			bluemac=m_BluetoothAdapter.getAddress();
+		String bluemac = "bluenull";
+		if (m_BluetoothAdapter != null) {
+			bluemac = m_BluetoothAdapter.getAddress();
 		}
 
 		udid = mac + bluemac;
@@ -251,7 +266,7 @@ public class LoginActivity extends Activity {
 			JSONObject obj = new JSONObject(res);
 			Log.e("", params.toString());
 			if (obj.get("status").toString().equals("0")) {
-				//myHandler.sendEmptyMessage(SUCCESS);
+				// myHandler.sendEmptyMessage(SUCCESS);
 				SharedPreferences settings = getSharedPreferences("setting", 0);
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putString("phone", phone);
@@ -264,11 +279,11 @@ public class LoginActivity extends Activity {
 				SMSSDK.unregisterAllEventHandler();
 				Log.e("msg", "success");
 			} else {
-				Message msg=new Message();
-				Bundle b=new Bundle();
-				b.putString("err",obj.get("description").toString());
-				Log.e("err",obj.get("description").toString()+"__"+res);
-				msg.what=3;
+				Message msg = new Message();
+				Bundle b = new Bundle();
+				b.putString("err", obj.get("description").toString());
+				Log.e("err", obj.get("description").toString() + "__" + res);
+				msg.what = 3;
 				msg.setData(b);
 				myHandler.sendMessage(msg);
 				Log.e("msg", "failure");
@@ -299,16 +314,27 @@ public class LoginActivity extends Activity {
 				}).start();
 				break;
 			case ERROR:
+				// System.out.println("hahaha" +
+				// msg.getData().getString("err"));
+				if (msg.getData().getString("err").equals("验证码错误")) {
+					captchaEdit.setBackground(getResources().getDrawable(
+							R.drawable.err_box));
+				} else
+					phoneEdit.setBackground(getResources().getDrawable(
+							R.drawable.err_box));
+
 				Toast.makeText(getApplicationContext(),
-						"" + msg.getData().getString("err"),
-						Toast.LENGTH_SHORT).show();
-				Log.e("err",msg.getData().getString("err"));
+						"" + msg.getData().getString("err"), Toast.LENGTH_SHORT)
+						.show();
+				Log.e("err", msg.getData().getString("err"));
 				break;
 			case SUCCESS:
-				Toast.makeText(getApplicationContext(), "登录成功",Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "登录成功",
+						Toast.LENGTH_SHORT).show();
 				break;
 			case TIMER:
-				sendBtn.setText(getString(R.string.send)+"("+msg.getData().getInt("data")+")");
+				sendBtn.setText(getString(R.string.send) + "("
+						+ msg.getData().getInt("data") + ")");
 				break;
 			case RESET:
 				sendBtn.setText(getString(R.string.send));
@@ -321,7 +347,7 @@ public class LoginActivity extends Activity {
 	}
 
 	public static String getErrorMsg(String err) {
-		 err=err.substring(err.indexOf('{'), err.indexOf('}') + 1);
+		err = err.substring(err.indexOf('{'), err.indexOf('}') + 1);
 		String res = "";
 		try {
 			res = new JSONObject(err).getString("description");
@@ -330,9 +356,10 @@ public class LoginActivity extends Activity {
 		}
 		return res;
 	}
-	
+
 	/* 再次返回后退出 */
 	private long exitTime = 0;
+
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {

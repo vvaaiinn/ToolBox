@@ -196,23 +196,38 @@ public class HourActivity extends Activity {
 					JSONObject obj3 = lastweek.getJSONObject(id);
 					HashMap<String, String> map = new HashMap<String, String>();
 					map.put("item", obj.getString("name"));
-					String d1 = obj.getString("consume");
-					String d2 = obj.getString("filter_pv");
-					String d3 = obj.getString("pv");
-					map.put("consume", CalcEcpm(d1, d2, d3));
-					String t1 = obj2.getString("consume");
-					String t2 = obj2.getString("filter_pv");
-					String t3 = obj2.getString("pv");
+
+					// String d1 = obj.getString("consume");
+					// String d2 = obj.getString("filter_pv");
+					// String d3 = obj.getString("pv");
+					// map.put("consume", CalcEcpm(d1, d2, d3));
+
+					if (obj.getString("ecpm").equals("N/A"))
+						map.put("consume", "N/A");
+					else
+						map.put("consume", String.valueOf(new BigDecimal(Float
+								.valueOf(obj.getString("ecpm"))).setScale(2,
+								BigDecimal.ROUND_HALF_UP).floatValue()));
+
+					// String t1 = obj2.getString("consume");
+					// String t2 = obj2.getString("filter_pv");
+					// String t3 = obj2.getString("pv");
+					// map.put("rate",
+					// rateFormat(CalcEcpm(d1, d2, d3),
+					// CalcEcpm(t1, t2, t3)));
 					map.put("rate",
-							rateFormat(CalcEcpm(d1, d2, d3),
-									CalcEcpm(t1, t2, t3)));
-					t1 = obj3.getString("consume");
-					t2 = obj3.getString("filter_pv");
-					t3 = obj3.getString("pv");
+							rateFormat(obj.getString("ecpm"),
+									obj2.getString("ecpm")));
+					// t1 = obj3.getString("consume");
+					// t2 = obj3.getString("filter_pv");
+					// t3 = obj3.getString("pv");
 					if (!day) {
 						map.put("rate",
-								rateFormat(CalcEcpm(d1, d2, d3),
-										CalcEcpm(t1, t2, t3)));
+								rateFormat(obj.getString("ecpm"),
+										obj3.getString("ecpm")));
+						// map.put("rate",
+						// rateFormat(CalcEcpm(d1, d2, d3),
+						// CalcEcpm(t1, t2, t3)));
 					}
 					if (obj.getString("name").equals("总计")
 							|| obj.getString("name").equals("其它搜索")) {
@@ -395,12 +410,6 @@ public class HourActivity extends Activity {
 				}
 				break;
 			case RATE1:
-				if (dataType)
-					initData();
-				else
-					initData2();
-				la.notifyDataSetChanged();
-				loading.setVisibility(View.GONE);
 				if (dataType) {
 					consumeText.setText("小时consume(元)");
 					Toast.makeText(getApplicationContext(), "小时consume(元)",
@@ -410,6 +419,12 @@ public class HourActivity extends Activity {
 					Toast.makeText(getApplicationContext(), "小时ecpm(元)",
 							Toast.LENGTH_SHORT).show();
 				}
+				if (dataType)
+					initData();
+				else
+					initData2();
+				la.notifyDataSetChanged();
+				loading.setVisibility(View.GONE);
 				break;
 			case PARSE:
 				// Boolean flag = false;
