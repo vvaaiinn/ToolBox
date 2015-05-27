@@ -190,9 +190,6 @@ public class MainActivity extends Activity {
 			SharedPreferences settings = getSharedPreferences("setting", 0);
 			ids = settings.getString("selected", "0,1,2,3,4,").split(",");
 
-			// for (String id : ids) {
-			// System.out.println("hahaha" + id);
-			// }
 			JSONObject result = new JSONObject(res);
 			String status = result.getString("status");
 			if (status.equals("0")) {
@@ -246,11 +243,11 @@ public class MainActivity extends Activity {
 						// rateFormat(CalcEcpm(d1, d2, d3),
 						// CalcEcpm(t1, t2, t3)));
 					}
-					if (obj.getString("name").equals("总计")
-							|| obj.getString("name").equals("其它搜索")) {
-						map.put("consume", "N/A");
-						map.put("rate", "N/A");
-					}
+					// if (obj.getString("name").equals("总计")
+					// || obj.getString("name").equals("其它搜索")) {
+					// map.put("consume", "N/A");
+					// map.put("rate", "N/A");
+					// }
 
 					map.put("path",
 							PrivateUtil.getPath(Integer.valueOf(id), catalog));
@@ -379,6 +376,8 @@ public class MainActivity extends Activity {
 							res = "";
 							SharedPreferences settings = getSharedPreferences(
 									"setting", 0);
+							String tt = settings.getString("selected",
+									"0,1,2,3,4,");
 							StringBuilder params = new StringBuilder();
 							params.append("phone="
 									+ settings.getString("phone", ""));
@@ -387,13 +386,17 @@ public class MainActivity extends Activity {
 							params.append("&ver="
 									+ VersionUtil
 											.getVerName(getApplicationContext()));
+							String url = Constants.URL + "getContent.php?"
+									+ getDatePram() + params.toString()
+									+ "&tt=" + tt;
 
 							res = GetPostUtil.sendGet(Constants.URL
 									+ "getContent.php",
-									getDatePram() + params.toString());
-							// System.out.println(res);
+									getDatePram() + params.toString() + "&tt="
+											+ tt);
+							System.out.println(res);
 							catalog = GetPostUtil.sendGet(Constants.URL
-									+ "getBizlist.php", params.toString());
+									+ "getBizlist.php", null);
 
 							myhandler.sendEmptyMessage(PARSE);
 							result.setRes(res);

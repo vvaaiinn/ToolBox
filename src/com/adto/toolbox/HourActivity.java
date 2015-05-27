@@ -229,11 +229,11 @@ public class HourActivity extends Activity {
 						// rateFormat(CalcEcpm(d1, d2, d3),
 						// CalcEcpm(t1, t2, t3)));
 					}
-					if (obj.getString("name").equals("总计")
-							|| obj.getString("name").equals("其它搜索")) {
-						map.put("consume", "N/A");
-						map.put("rate", "N/A");
-					}
+					// if (obj.getString("name").equals("总计")
+					// || obj.getString("name").equals("其它搜索")) {
+					// map.put("consume", "N/A");
+					// map.put("rate", "N/A");
+					// }
 					map.put("path",
 							PrivateUtil.getPath(Integer.valueOf(id), catalog));
 					data.add(map);
@@ -354,6 +354,8 @@ public class HourActivity extends Activity {
 
 							SharedPreferences settings = getSharedPreferences(
 									"setting", 0);
+							String tt = settings.getString("selected",
+									"0,1,2,3,4,");
 							StringBuilder params = new StringBuilder();
 							params.append("phone="
 									+ settings.getString("phone", ""));
@@ -365,7 +367,8 @@ public class HourActivity extends Activity {
 
 							res = GetPostUtil.sendGet(Constants.URL
 									+ "getContent.php",
-									getDatePram() + params.toString());
+									getDatePram() + params.toString() + "&tt="
+											+ tt);
 							catalog = GetPostUtil.sendGet(Constants.URL
 									+ "getBizlist.php", params.toString());
 
